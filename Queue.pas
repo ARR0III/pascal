@@ -50,7 +50,7 @@ begin
   new(tmp);
   tmp^.data:= data;
   tmp^.next:= pp^;
-  pp^:= tmp;
+  pp^:= tmp
 end;
 
 procedure QueueDelete(var ptr: itemflp; data: datatype);
@@ -96,14 +96,14 @@ begin
   if w = first then { insert in first }
   begin
     tmp^.next:= ptr.first;
-	ptr.first:= tmp
+    ptr.first:= tmp
   end
   else
   if w = last then  { insert in last }
   begin
-	ptr.last^.next:= tmp;
-	ptr.last:= tmp;
-	tmp^.next:= nil
+    ptr.last^.next:= tmp;
+    ptr.last:= tmp;
+    tmp^.next:= nil
   end
 end;
 
