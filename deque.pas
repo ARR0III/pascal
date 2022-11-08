@@ -1,15 +1,14 @@
 program deque_source;
 
 type
-  datatype =  longint;
+  datatype = longint;
+
   dequeptr = ^deque;
 
   deque = record
     data: datatype;
     prev, next: dequeptr;
   end;
-
-  where = (first, last);
 
   fls = record
     first, last: dequeptr;
@@ -24,6 +23,42 @@ end;
 function DequeEmpty(ptr: fls): boolean; {correct}
 begin
   DequeEmpty:= ptr.first = nil
+end;
+
+function DequeInsert(var ptr: fls; data: datatype): boolean; {???}
+var
+  insert: boolean;
+  tmp, new_el: dequeptr;
+begin
+  insert:= false;
+  tmp:= ptr.first;
+
+  while tmp <> nil do
+  begin
+    if tmp^.data = data then
+    begin
+      new(new_el);
+
+      new_el^.data:= data;
+      new_el^.next:= tmp^.next; {next data or nil pointer}
+      new_el^.prev:= tmp;
+
+      if tmp^.next <> nil then
+        tmp^.next^.prev:= new_el
+      else
+        ptr.last:= new_el;
+
+      tmp^.next:= new_el;
+      tmp:= new_el^.next;
+
+      if insert = false then
+        insert:= true;
+    end
+    else
+      tmp:= tmp^.next
+  end;
+
+  DequeInsert:= insert
 end;
 
 procedure DequePushBack(var ptr: fls; data: datatype); {correct}
@@ -107,7 +142,7 @@ begin
 end;
 
 var
-  d: datatype;
+  d, search: datatype;
   list: fls;
 begin
   while not SeekEof do
@@ -116,11 +151,17 @@ begin
     DequePushFront(list, d)
   end;
 
+  write('Enter number for inserting:');
+  read(search);
+
+  if DequeInsert(list, search) = true then
+    writeln('Number ', search, ' inserted in deque!');
+
   while not DequeEmpty(list) do
   begin
     DequePopFront(list, d);
     writeln(d)
-  end;  
+  end;
 end.
 
 
